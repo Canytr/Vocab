@@ -37,7 +37,7 @@ typing_test_frame = tk.Frame(container, bg="#1E1E1E")
 voc_test_frame = tk.Frame(container, bg="#1E1E1E")
 sentence_mode_frame = tk.Frame(container, bg="#1E1E1E")
 
-for frame in (typing_test_frame, voc_test_frame):
+for frame in (typing_test_frame, voc_test_frame, sentence_mode_frame):
     frame.grid(row=0, column=0, sticky="nsew")
 
 # Initialize frames

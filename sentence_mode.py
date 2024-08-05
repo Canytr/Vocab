@@ -1,69 +1,53 @@
 import tkinter as tk
 from tkinter import messagebox
 import random
-import time
 
-# Sample words for the typing test
-words_list = ["these", "year", "add", "that", "big", "soon", "later", "give", "this", "came", "see", "put", "another", "number", "it's", "no", "few", "talk", "also", "at", "are", "world", "stop", "by"]
+# Path to the file containing sentences
+file_path = "sentence.txt"
 
-# Shuffle the words
-random.shuffle(words_list)
+# Reading sentences
+with open(file_path, "r", encoding="utf-8") as file:
+    sentences = [line.strip() for line in file]
 
-# Timer variables
-time_limit = 60  # in seconds
+# Shuffle the order (optional)
+random.shuffle(sentences)
 
-# Function to update the timer
-def update_timer(label_timer, start_time, entry_word):
-    elapsed_time = time.time() - start_time
-    remaining_time = time_limit - int(elapsed_time)
-    if remaining_time > 0:
-        label_timer.config(text=f"0:{remaining_time:02d}")
-        label_timer.after(1000, update_timer, label_timer, start_time, entry_word)
-    else:
-        messagebox.showinfo("Time's up", "The time is over!")
-        entry_word.config(state="disabled")
-
-# Function to check the word
-def check_word(event=None):
-    global current_word_index
-    user_input = entry_word.get().strip()
-    if user_input == words_list[current_word_index]:
-        words_labels[current_word_index].config(fg="green")
-    else:
-        words_labels[current_word_index].config(fg="red")
-
-    current_word_index += 1
-    if current_word_index < len(words_list):
-        entry_word.delete(0, tk.END)
-    else:
-        messagebox.showinfo("Completed", "You have typed all the words!")
-        entry_word.config(state="disabled")
-
-# Function to create the typing test frame
+# Function to create the sentence mode frame
 def create_sentence_mode_frame(frame):
-    global entry_word, words_labels, current_word_index
-    current_word_index = 0
+    global current_index, current_sentence, label_sentence, entry_sentence
+    current_index = 0
+    current_sentence = sentences[current_index]
 
-    # Create a frame for words
-    frame_words = tk.Frame(frame, bg="#1E1E1E")
-    frame_words.pack(pady=20)
+    # Functions
+    def check_answer(event=None):
+        global current_index, current_sentence
+        user_answer = entry_sentence.get().strip()
+        correct_answer = current_sentence.strip()
 
-    # Display the words
-    words_labels = []
-    for word in words_list:
-        label = tk.Label(frame_words, text=word, font=("Helvetica", 14), padx=5, pady=5, bg="#1E1E1E", fg="#D4D4D4")
-        label.pack(side="left")
-        words_labels.append(label)
+        if user_answer == correct_answer:
+            label_sentence.config(bg="green")
+            messagebox.showinfo("Correct", "Correct answer!")
+        else:
+            label_sentence.config(bg="red")
+            messagebox.showerror("Incorrect", f"Incorrect answer. Correct answer: {current_sentence}")
 
-    # Entry widget for user input
-    entry_word = tk.Entry(frame, font=("Helvetica", 18), bg="#3C3C3C", fg="#D4D4D4", insertbackground="white")
-    entry_word.pack(pady=20)
-    entry_word.bind('<Return>', check_word)
+        # Move to the next sentence
+        current_index += 1
+        if current_index < len(sentences):
+            current_sentence = sentences[current_index]
+            label_sentence.config(text=current_sentence, bg="white")
+            entry_sentence.delete(0, tk.END)
+        else:
+            messagebox.showinfo("Congratulations", "Quiz completed!")
+            entry_sentence.config(state="disabled")
 
-    # Timer label
-    label_timer = tk.Label(frame, text=f"1:00", font=("Helvetica", 18), bg="#1E1E1E", fg="#D4D4D4")
-    label_timer.pack(pady=10)
+    # Create widgets
+    label_sentence = tk.Label(frame, text=current_sentence, font=("Helvetica", 24), bg="#1E1E1E", fg="#D4D4D4", padx=20, pady=20, relief=tk.RAISED)
+    label_sentence.pack(pady=20)
 
-    # Start the timer
-    start_time = time.time()
-    update_timer(label_timer, start_time, entry_word)
+    entry_sentence = tk.Entry(frame, font=("Helvetica", 18), bg="#3C3C3C", fg="#D4D4D4", insertbackground="white")
+    entry_sentence.pack(pady=30, padx=20, ipadx=10, ipady=5)  # Adjusted padding and internal padding
+    entry_sentence.bind('<Return>', check_answer)  # Bind Enter key to check_answer function
+
+    button_check = tk.Button(frame, text="Check Answer", command=check_answer, font=("Helvetica", 16), bg="#007ACC", fg="#FFFFFF")
+    button_check.pack(pady=20)
