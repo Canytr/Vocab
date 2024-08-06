@@ -1,0 +1,10 @@
+cat,kedi
+dog,köpek
+house,ev
+car,araba
+tree,ağaç
+book,kitap
+computer,bilgisayar
+phone,telefon
+table,masa
+chair,sandalye

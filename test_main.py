@@ -3,6 +3,7 @@ from tkinter import ttk
 import typing_test
 import voc_test
 import sentence_mode
+import practise_mode
 
 # Function to switch frames
 def show_frame(frame):
@@ -36,14 +37,17 @@ container.grid_columnconfigure(0, weight=1)
 typing_test_frame = tk.Frame(container, bg="#1E1E1E")
 voc_test_frame = tk.Frame(container, bg="#1E1E1E")
 sentence_mode_frame = tk.Frame(container, bg="#1E1E1E")
+practise_mode_frame = tk.Frame(container, bg="#1E1E1E")
 
-for frame in (typing_test_frame, voc_test_frame, sentence_mode_frame):
+
+for frame in (typing_test_frame, voc_test_frame, sentence_mode_frame, practise_mode_frame):
     frame.grid(row=0, column=0, sticky="nsew")
 
 # Initialize frames
 typing_test.create_typing_test_frame(typing_test_frame) 
 voc_test.create_voc_test_frame(voc_test_frame)  
-sentence_mode.create_sentence_mode_frame(sentence_mode_frame)       
+sentence_mode.create_sentence_mode_frame(sentence_mode_frame)    
+practise_mode.create_practise_mode_frame(practise_mode_frame)       
 
 # Sidebar menu
 sidebar = tk.Frame(root, bg="#333333", width=300)
@@ -57,6 +61,7 @@ button_fg_color = '#FFFFFF'  # White
 button_typing_test = create_button(sidebar, "Typing Test", lambda: show_frame(typing_test_frame), button_bg_color, button_fg_color)
 button_voc_test = create_button(sidebar, "Voc Test", lambda: show_frame(voc_test_frame), button_bg_color, button_fg_color)
 button_sentence_mode = create_button(sidebar, "Sentence Mode", lambda: show_frame(sentence_mode_frame), button_bg_color, button_fg_color)
+button_practise_mode = create_button(sidebar, "Practise Mode", lambda: show_frame(practise_mode_frame), button_bg_color, button_fg_color)
 button_exit = create_button(sidebar, "Exit", quit_app, '#FF5733', button_fg_color)  # Orange for exit button
 
 # Show the initial frame
